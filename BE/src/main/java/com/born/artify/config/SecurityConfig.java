@@ -2,6 +2,7 @@ package com.born.artify.config;
 
 import com.born.artify.auth.handler.OAuth2LoginSuccessHandler;
 import com.born.artify.auth.service.OauthUserService;
+//import org.apache.catalina.filters.CorsFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -14,7 +15,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
+import org.springframework.web.filter.CorsFilter;
 import java.util.List;
 
 @Configuration
@@ -34,9 +35,25 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+
+        configuration.setAllowedOrigins(List.of("http://localhost:3000")); // 허용할 오리진 (여러개 가능)
+        // configuration.addAllowedOriginPattern("*");  // 모든 도메인 허용
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); // 허용할 HTTP 메서드
+        configuration.setAllowedHeaders(List.of("*")); // 허용할 헤더
+        configuration.setAllowCredentials(true); // 자격증명 허용 (쿠키, 인증정보)
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration); // 모든 경로에 적용
+
+        return source;
+    }
+
     // 시큐리티 설정
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http, JwtAuthenticationFilter jwtFilter) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, JwtAuthenticationFilter jwtFilter, CorsConfigurationSource corsConfigurationSource) throws Exception {
         http
                 .csrf(csrf -> csrf.disable()) // CSRF 비활성화
                 .sessionManagement(session -> session
@@ -51,25 +68,12 @@ public class SecurityConfig {
                         .successHandler(successHandler) // OAuth 로그인 성공 시 처리 (JWT 발급 등)
                         .defaultSuccessUrl("/main", true) // 로그인 성공 후 /main 페이지로 리디렉션
                 )
+                .addFilterBefore(new CorsFilter(corsConfigurationSource), UsernamePasswordAuthenticationFilter.class)
+                // JWT 필터는 그 다음에 추가
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         ; // 기본 인증 방식 (원래 있던 거)
 
         return http.build();
     }
 
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-
-        // configuration.setAllowedOrigins(List.of("http://localhost:3000")); // 허용할 오리진 (여러개 가능)
-        configuration.addAllowedOriginPattern("*");  // 모든 도메인 허용
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); // 허용할 HTTP 메서드
-        configuration.setAllowedHeaders(List.of("*")); // 허용할 헤더
-        configuration.setAllowCredentials(true); // 자격증명 허용 (쿠키, 인증정보)
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration); // 모든 경로에 적용
-
-        return source;
-    }
 }
