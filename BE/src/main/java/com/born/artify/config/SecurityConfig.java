@@ -10,6 +10,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -30,7 +36,7 @@ public class SecurityConfig {
 
     // 시큐리티 설정
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, JwtAuthenticationFilter jwtFilter) throws Exception {
         http
                 .csrf(csrf -> csrf.disable()) // CSRF 비활성화
                 .sessionManagement(session -> session
@@ -45,10 +51,25 @@ public class SecurityConfig {
                         .successHandler(successHandler) // OAuth 로그인 성공 시 처리 (JWT 발급 등)
                         .defaultSuccessUrl("/main", true) // 로그인 성공 후 /main 페이지로 리디렉션
                 )
-               /* .addFilterBefore(new JwtAuthenticationFilter(JwtProvider),
-                        UsernamePasswordAuthenticationFilter.class); // ⭐ JWT 필터 등록;*/
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         ; // 기본 인증 방식 (원래 있던 거)
 
         return http.build();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+
+        // configuration.setAllowedOrigins(List.of("http://localhost:3000")); // 허용할 오리진 (여러개 가능)
+        configuration.addAllowedOriginPattern("*");  // 모든 도메인 허용
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); // 허용할 HTTP 메서드
+        configuration.setAllowedHeaders(List.of("*")); // 허용할 헤더
+        configuration.setAllowCredentials(true); // 자격증명 허용 (쿠키, 인증정보)
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration); // 모든 경로에 적용
+
+        return source;
     }
 }

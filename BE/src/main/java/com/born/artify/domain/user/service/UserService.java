@@ -34,4 +34,12 @@ public class UserService {
 
         return userRepository.save(user); // 저장
     }
+
+    public User getUser(String email) {
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        return user;
+    }
 }
