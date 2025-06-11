@@ -1,5 +1,6 @@
 package com.born.artify.auth.service;
 
+import com.born.artify.auth.dto.EmailReqDTO;
 import com.born.artify.auth.dto.LoginReqDTO;
 import com.born.artify.auth.dto.TokenResDTO;
 import com.born.artify.config.JwtProvider;
@@ -33,6 +34,12 @@ public class AuthService {
         String refreshToken = jwtProvider.createRefreshToken(user.getEmail());
 
         return new TokenResDTO(accessToken, refreshToken);
+    }
+
+    public boolean existEmailCheck(EmailReqDTO req){
+        boolean isExistEmail = userRepository.existsByEmail(req.getEmail());
+
+        return isExistEmail;
     }
 
 }
