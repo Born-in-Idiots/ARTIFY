@@ -1,5 +1,6 @@
 package com.born.artify.auth.controller;
 
+import com.born.artify.auth.dto.EmailReqDTO;
 import com.born.artify.auth.dto.LoginReqDTO;
 import com.born.artify.auth.dto.TokenResDTO;
 import com.born.artify.auth.service.AuthService;
@@ -42,6 +43,24 @@ public class AuthController {
                 .header("Authorization", "Bearer " + token.getAccessToken())
                 .header("Refresh-Token", token.getRefreshToken())
                 .body(result);
+    }
+
+
+    @PostMapping("/api/auth/email/check")
+    public ResponseEntity<Map<String, Object>>existCheckEmail(@RequestBody EmailReqDTO request) {
+        boolean isExistEmail = authService.existEmailCheck(request);
+
+        Map<String, Object> result = new HashMap<>();
+
+        if(isExistEmail) {
+            result.put("status", 401);
+            result.put("msg", "이미 사용중인 이메일입니다.");
+        }else{
+            result.put("status", 200);
+            result.put("msg", "이메일을 사용하실 수 있습니다.");
+        }
+
+        return ResponseEntity.ok().body(result);
     }
 
     @GetMapping("/main")
