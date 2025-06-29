@@ -9,10 +9,7 @@ import com.born.artify.config.JwtProvider;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.io.IOException;
@@ -62,6 +59,27 @@ public class AuthController {
 
         return ResponseEntity.ok().body(result);
     }
+
+
+   /* @PostMapping("/logout")
+    public ResponseEntity<Void> logout(
+            @RequestHeader("Authorization") String accessToken,
+            HttpServletResponse response,
+            @CookieValue(name = "refreshToken", required = false) String refreshToken
+    ) {
+        authService.logout(accessToken, refreshToken);
+
+        // 쿠키 삭제
+        Cookie cookie = new Cookie("refreshToken", null);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(true); // HTTPS 환경에서만 전송
+        cookie.setPath("/");
+        cookie.setMaxAge(0); // 즉시 만료
+        response.addCookie(cookie);
+
+        return ResponseEntity.ok().build();
+    }*/
+
 
     @GetMapping("/main")
     public ResponseEntity<Map<String, Object>>mainTest() throws IOException {

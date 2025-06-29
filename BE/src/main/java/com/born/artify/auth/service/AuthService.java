@@ -36,6 +36,18 @@ public class AuthService {
         return new TokenResDTO(accessToken, refreshToken);
     }
 
+    public void logout(String accessToken) {
+        String token = accessToken.replace("Bearer ", "");
+
+        // 액세스 토큰에서 사용자 ID 추출
+        String userId = jwtProvider.extractUserId(token);
+
+        // 저장된 RefreshToken 제거
+        // refreshTokenRepository.deleteByUserId(userId);
+
+        // 필요 시 AccessToken을 블랙리스트에 등록할 수도 있음 (Redis 등 사용 시)
+    }
+
     public boolean existEmailCheck(EmailReqDTO req){
         boolean isExistEmail = userRepository.existsByEmail(req.getEmail());
 
