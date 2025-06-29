@@ -51,6 +51,14 @@ public class JwtProvider {
                 .getSubject();
     }
 
+    public String extractUserId(String token) {
+        return Jwts.parser()
+                .setSigningKey(secretKey.getBytes())
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject(); // 일반적으로 subject에 userId 저장
+    }
+
     // 토큰 유효성 검증
     public boolean validateToken(String token) {
         try {
