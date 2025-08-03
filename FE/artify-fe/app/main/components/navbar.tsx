@@ -1,6 +1,8 @@
 "use client";
 
+import Image from "next/image";
 import React, { useState, useEffect } from "react";
+import { CiLogout } from "react-icons/ci";
 
 const Navbar = () => {
   const [currentDate, setCurrentDate] = useState("");
@@ -20,13 +22,28 @@ const Navbar = () => {
   }, []);
 
   return (
-    <div className="bg-[#261FB3] h-[3rem] flex justify-end items-center px-4 font-bold text-white">
-      <p>
-        {currentDate}{" "}
-        <span className={dayOfWeek === "SUN" ? "text-red-500" : ""}>
-          {dayOfWeek}
-        </span>
-      </p>
+    <div className="bg-white h-[3rem] flex justify-between items-center px-4 font-bold">
+      <div className="relative w-[6rem] h-[6rem]">
+        <Image src={"/logo.png"} width={100} height={100} alt="logo" />
+      </div>
+      <div className="flex justify-around items-center w-[18rem]">
+        <CiLogout className="hover:cursor-pointer" />
+        <div className="relative w-[2.5rem] h-[2.5rem]">
+          <Image
+            src={"/userIcon.png"}
+            width={40}
+            height={40}
+            alt="userIcon"
+            className="hover:cursor-pointer"
+          />
+        </div>
+        <p>
+          {currentDate}{" "}
+          <span className={dayOfWeek === "SUN" ? "text-red-500" : ""}>
+            {dayOfWeek}
+          </span>
+        </p>
+      </div>
     </div>
   );
 };

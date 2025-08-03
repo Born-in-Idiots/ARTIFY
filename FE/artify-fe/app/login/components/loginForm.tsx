@@ -1,10 +1,13 @@
 "use client";
+
 import Button from "@/app/components/ui/button";
 import Input from "@/app/components/ui/Input";
 import React, { useState } from "react";
 import axios from "axios";
 import { defaultDataType } from "../type";
 import { useRouter } from "next/navigation";
+import { IoMdPlanet } from "react-icons/io";
+import API from "@/utils/endpoint";
 
 const LoginForm = ({
   requestData,
@@ -26,7 +29,7 @@ const LoginForm = ({
 
   const onSubmit = async () => {
     try {
-      const response = await axios.post("~/api/auth/login", {
+      const response = await axios.post(API.LOGIN, {
         email: formItem.email,
         password: formItem.password,
       });
@@ -50,51 +53,48 @@ const LoginForm = ({
   };
 
   return (
-    <div className="absolute top-0 left-0 w-full h-full flex items-center justify-start z-20">
-      <div className="w-[500px] h-full bg-white p-6 rounded-xl shadow-lg flex flex-col items-center">
-        <div className="text-[2.2rem] h-[30%] flex items-center font-bold">
+    <div className="w-full h-full flex items-center justify-center z-20">
+      <div className="w-full max-w-[420px] bg-white p-4 sm:p-6 rounded-xl shadow-lg flex flex-col items-center mx-2">
+        <div className="flex items-center justify-center w-full text-xl sm:text-2xl md:text-3xl py-4 sm:py-6 text-center font-bold">
+          <IoMdPlanet className="mr-2" />
           <p>WELCOME TO ARTIFY</p>
         </div>
-        <div className="w-[90%] border border-gray-300 py-10 px-6 rounded-lg">
+        <div className="w-full border border-gray-300 py-6 px-4 sm:py-8 sm:px-6 rounded-lg">
           <Input
             title={"Email"}
             type="email"
             value={formItem.email}
-            styles={"w-full mb-4 p-2 border border-gray-300 rounded"}
+            styles="w-full mb-3 sm:mb-4 p-2 border border-gray-300 rounded text-sm sm:text-base focus:ring-2 focus:ring-blue-400 focus:border-transparent"
             placeholder={"Your Email"}
             onChange={onChange}
           />
-
           <Input
             title={"Password"}
             type="password"
             value={formItem.password}
-            styles={"w-full mb-4 p-2 border border-gray-300 rounded"}
+            styles="w-full mb-3 sm:mb-4 p-2 border border-gray-300 rounded text-sm sm:text-base focus:ring-2 focus:ring-blue-400 focus:border-transparent"
             placeholder={"Your Password"}
             onChange={onChange}
           />
           <Button
             title={"Sign in"}
-            styles={
-              "w-full bg-gray-800 py-1 rounded-lg text-white mt-4 cursor-pointer hover:bg-gray-700"
-            }
+            styles="w-full bg-gray-800 py-2 rounded-lg text-white mt-4 cursor-pointer hover:bg-gray-700 transition-colors"
             onClick={onSubmit}
           />
           <Button
             title={"Sign up"}
-            styles={
-              "w-full py-1 rounded-lg text-gray-800 mt-4 cursor-pointer border border-gray-800 hover:bg-gray-50"
-            }
+            styles="w-full py-2 rounded-lg text-gray-800 mt-4 cursor-pointer border border-gray-800 hover:bg-gray-50 transition-colors"
             onClick={onJoin}
           />
           {error && (
             <div className="mt-4 flex justify-center">
-              <p className="text-red-400">{error}</p>
+              <p className="text-red-400 text-sm sm:text-base">{error}</p>
             </div>
           )}
         </div>
-        <div className="mt-8 w-[85%]">
-          <button className="w-full py-1 rounded-lg mt-4 border border-black h-[3rem] cursor-pointer hover:bg-gray-50">
+        {/* 소셜 로그인 */}
+        <div className="mt-6 w-full">
+          <button className="w-full py-2 rounded-lg mt-4 border border-black h-12 cursor-pointer hover:bg-gray-50 text-sm sm:text-base transition-colors">
             😁 Sign in (Git)
           </button>
         </div>

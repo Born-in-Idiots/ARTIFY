@@ -1,7 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import LogoBackgroundImage from "./components/background/logoBackgroundImage";
+import LogoPage from "./logo/page";
 
 export default function Home() {
   const router = useRouter();
@@ -19,8 +19,8 @@ export default function Home() {
   }, [router]);
 
   return (
-    <>
-      <LogoBackgroundImage />
-    </>
+    <div className="w-full min-h-screen flex items-center">
+      <LogoPage />
+    </div>
   );
 }

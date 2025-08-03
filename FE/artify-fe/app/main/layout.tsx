@@ -18,7 +18,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Navbar />
-        <main>{children}</main>
+        <main className="h-[calc(100vh-3rem)] overflow-hidden">{children}</main>
       </body>
     </html>
   );

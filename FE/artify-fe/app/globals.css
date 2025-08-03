@@ -1,11 +1,54 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: "GongGothicMedium";
+  src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10@1.0/GongGothicMedium.woff")
+    format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+.gong-gothic {
+  font-family: "GongGothicMedium", sans-serif;
+}
+
 body {
   margin: 0;
   padding: 0;
-  width: 100vw;
-  height: 100vh;
-  /* overflow: hidden; */
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  font-family: "GongGothicMedium", sans-serif;
+  overflow-x: hidden;
+}
+
+.stars {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.star {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  opacity: 0.8;
+  animation: twinkle 2s infinite ease-in-out;
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 0.2;
+  }
 }
 
 @media screen and (max-width: 768px) {
@@ -30,4 +73,17 @@ body {
   :root {
     font-size: 16px;
   }
+}
+
+@keyframes glow-border {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+.animate-glow-border {
+  animation: glow-border 3s linear infinite;
 }
