@@ -40,6 +40,11 @@ app.add_middleware(
 @app.post("/translate", tags=['Core'])
 def translate(inputs: TranslateInput):
     ''' Translation Interface API 입니다.'''
+    print("="*100)
+    print(inputs)
+    print("="*100)
+    print(inputs.info)
+    print("="*100)
     config = inputs.info
     template = config['template']
     template_variable = config['template_variable']
