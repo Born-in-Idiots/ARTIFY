@@ -56,7 +56,9 @@ public class AuthController {
 
         Map<String, Object> result = new HashMap<>();
         result.put("status", 200);
-        result.put("msg", "성공적으로 가입되었습니다.");
+        result.put("msg", "성공적으로 로그인이되었습니다.");
+        result.put("accessToken", token.getAccessToken());
+        result.put("refreshToken", token.getRefreshToken());
 
         return ResponseEntity.ok()
                 .header("Authorization", "Bearer " + token.getAccessToken())
