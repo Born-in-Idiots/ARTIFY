@@ -9,8 +9,8 @@ COPY requirements.txt ./requirements.txt
 RUN pip install --upgrade pip && \
     pip install -r requirements.txt
 
-# 전체 소스 코드 복사
-COPY . .
+# 소스 전체 복사 (Dockerfile 기준 상위 폴더 BE_p 안의 내용)
+COPY ../ . 
 
 # Render에서 사용하는 포트 환경 변수로 uvicorn 실행
 CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port $PORT"]
