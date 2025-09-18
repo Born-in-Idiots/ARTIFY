@@ -5,11 +5,11 @@ FROM python:3.10.12-slim
 WORKDIR /code/app
 
 # requirements 복사 및 설치
-COPY requirements.txt ./requirements.txt
+COPY ../requirements.txt .
 RUN pip install --upgrade pip && \
     pip install -r requirements.txt
 
-# 소스 전체 복사 (Dockerfile 기준 상위 폴더 BE_p 안의 내용)
+# 소스 전체 복사 (Docker build context 기준: ../)
 COPY ../ . 
 
 # Render에서 사용하는 포트 환경 변수로 uvicorn 실행
